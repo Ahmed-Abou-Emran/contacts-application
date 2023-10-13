@@ -34,18 +34,27 @@ const Wrapper = styled.div`
 const Details = styled.div`
   display: flex;
   justify-content: space-between;
-  width: 300px;
+  width: 18.75rem;
   color: #fff;
   font-family: Inter;
-  font-size: 20px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: normal;
+  font-size: 1.25rem;
   text-align: left;
+
+  @media (max-width: 37.5rem) {
+    width: 10rem;
+    flex-direction: column;
+    gap: 1rem;
+    justify-content: center;
+    align-items: center;
+  }
 `;
 
 const ImageWrapper = styled.div`
-  width: 110px;
+  width: 7rem;
+
+  @media (max-width: 37.5rem) {
+    width: 6rem;
+  }
 `;
 
 const Image = styled.img`
@@ -58,6 +67,9 @@ const ContactInfo = styled.div`
   flex-direction: column;
   align-items: flex-start;
   justify-content: space-around;
+  @media (max-width: 37.5rem) {
+    align-items: center;
+  }
 `;
 
 const PhoneNumber = styled.span`

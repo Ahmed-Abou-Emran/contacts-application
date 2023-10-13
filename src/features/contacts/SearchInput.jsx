@@ -11,10 +11,10 @@ function SearchUserInput() {
 
 const SearchInput = styled.input`
   width: 100%;
-  width: 946px;
+  /* width: 946px; */
   height: 45px;
   border-radius: 25px;
   background: #fff;
-  padding: 13px 18px;
+  padding: var(--spacing-30) var(--spacing-40);
 `;
 export default SearchUserInput;

@@ -16,22 +16,30 @@ function ContactsActions() {
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-100);
 
-  gap: 40px;
+  @media (max-width: 37.5rem) {
+    gap: var(--spacing-50);
+  }
 `;
 const ButtonWithIcon = styled.button`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: 230px;
-  height: 61px;
+  width: 14.375rem;
+  height: 3.75rem;
   background-color: var(--sky-400);
   align-self: flex-end;
 
-  padding: 14px 20px;
+  @media (max-width: 37.5rem) {
+    align-self: center;
+  }
+
+  padding: 0.875rem 1.25rem;
   border-radius: 20px;
   color: #fff;
-  font-size: 18px;
+  font-size: 1.25rem;
   transition: all 300ms ease-in;
 
   &:hover {

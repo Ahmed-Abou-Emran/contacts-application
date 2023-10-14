@@ -12,7 +12,6 @@ function ContactsList() {
   const { searchName } = React.useContext(ContactsContext);
   const [currentPage, setCurrentPage] = React.useState(1);
   const [numOfPages, setNumOfPages] = React.useState(1);
-  console.log(contacts);
 
   let filteredContacts = contacts?.filter((contact) => {
     if (searchName !== "") {

@@ -1,3 +1,4 @@
+import React from "react";
 import styled from "styled-components";
 import * as Dialog from "@radix-ui/react-dialog";
 
@@ -7,16 +8,32 @@ import {
   AiFillInfoCircle as InfoCircle,
   AiOutlineCloseCircle as Close,
 } from "react-icons/ai";
+import { ContactsContext } from "../features/contacts/ContactsProvider";
+import { useDeleteContact } from "../features/contacts/useDeleteContact";
 
-export function ContactDialog() {
+export function ContactDialog({ contact }) {
+  const { setSelectedContact, setFormIsOpen, setIsEditing } =
+    React.useContext(ContactsContext);
+
+  const { isDeleting, deleteContact } = useDeleteContact();
+
+  const onEditHandler = (contact) => {
+    setIsEditing(true);
+    setFormIsOpen(true);
+    setSelectedContact(contact);
+  };
   return (
     <Dialog.Root>
       <ActionsWrapper>
-        <Button hoverColor="var(--white-300)">
+        <Button
+          hoverColor="var(--white-300)"
+          onClick={() => onEditHandler(contact)}
+          disabled={isDeleting}
+        >
           <Edit style={{ color: "var(--sky-400)" }} />
         </Button>
         <Dialog.Trigger asChild>
-          <Button hoverColor="var(--white-300)">
+          <Button hoverColor="var(--white-300)" disabled={isDeleting}>
             <Delete style={{ color: "var(--red-400)" }} />
           </Button>
         </Dialog.Trigger>
@@ -36,7 +53,7 @@ export function ContactDialog() {
           <DialogDescription>
             Are you sure you need delete this user ?
           </DialogDescription>
-          <ActionsWrapper>
+          <DialogActions>
             <Dialog.Close asChild>
               <Button
                 color="#000"
@@ -53,12 +70,13 @@ export function ContactDialog() {
                 hoverColor="var(--sky-300)"
                 color="var(--white-100)"
                 borderRadius="25px"
+                onClick={() => deleteContact(contact.id)}
                 type="submit"
               >
                 Yes
               </Button>
             </Dialog.Close>
-          </ActionsWrapper>
+          </DialogActions>
           <Dialog.Close asChild>
             <IconButton aria-label="Close">
               <Close />
@@ -72,8 +90,13 @@ export function ContactDialog() {
 
 const ActionsWrapper = styled.div`
   display: flex;
-  gap: 37px;
+  gap: var(--spacing-90);
   align-self: flex-start;
+
+  @media (max-width: 37.5rem) {
+    flex-direction: column;
+    gap: var(--spacing-60);
+  }
 `;
 const Button = styled.button`
   width: 54px;
@@ -127,17 +150,24 @@ const DialogContent = styled(Dialog.Content)`
   align-items: center;
   justify-content: center;
 
-  > div > button {
-    min-width: 100px;
-  }
-  > div {
-    display: flex;
-    justify-content: space-between;
-    align-self: stretch;
-    margin-top: auto;
-  }
   &:focus {
     outline: none;
+  }
+`;
+
+const DialogActions = styled.div`
+  gap: var(--spacing-90);
+  display: flex;
+  justify-content: space-between;
+  align-self: stretch;
+  margin-top: auto;
+
+  > button {
+    min-width: 6rem;
+  }
+
+  @media (max-width: 37.5rem) {
+    gap: var(--spacing-60);
   }
 `;
 

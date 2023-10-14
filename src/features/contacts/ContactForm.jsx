@@ -16,8 +16,8 @@ export default function ContactForm() {
     setIsEditing,
   } = React.useContext(ContactsContext);
   const [previewImage, setPreviewImage] = React.useState(null);
-  const { isCreating, addContact } = useAddContact();
-  const { isUpdating, editCabin } = useEditContact();
+  const { addContact } = useAddContact();
+  const { editCabin } = useEditContact();
   const {
     register,
     handleSubmit,
@@ -26,6 +26,7 @@ export default function ContactForm() {
   } = useForm({
     defaultValues: selectedContact,
   });
+  console.log(errors);
   let imageSrc = previewImage
     ? previewImage
     : selectedContact?.imageUrl
@@ -72,30 +73,44 @@ export default function ContactForm() {
         </ImageInputWrapper>
       </PersonalImageContainer>
       <PersonalDetailsWrapper>
-        <Input
-          type="text"
-          placeholder="First Name"
-          {...register("firstName", { required: true, maxLength: 80 })}
-        />
-        <Input
-          type="text"
-          placeholder="Last name"
-          {...register("lastName", { required: true, maxLength: 100 })}
-        />
-        <Input
-          type="text"
-          placeholder="Email"
-          {...register("email", { required: true, pattern: /^\S+@\S+$/i })}
-        />
-        <Input
-          type="tel"
-          placeholder="Mobile number"
-          {...register("mobileNumber", {
-            required: true,
-            minLength: 6,
-            maxLength: 20,
-          })}
-        />
+        <InputWithErrorWrapper>
+          <Input
+            type="text"
+            placeholder="First Name"
+            {...register("firstName", { required: true, maxLength: 80 })}
+          />
+          {errors.firstName && <Error>This is a required field</Error>}
+        </InputWithErrorWrapper>
+        <InputWithErrorWrapper>
+          <Input
+            type="text"
+            placeholder="Last name"
+            {...register("lastName", { required: true, maxLength: 100 })}
+          />
+          {errors.lastName && <Error>This Is a required field</Error>}
+        </InputWithErrorWrapper>
+
+        <InputWithErrorWrapper>
+          <Input
+            type="text"
+            placeholder="Email"
+            {...register("email", { required: true, pattern: /^\S+@\S+$/i })}
+          />
+          {errors.lastName && <Error>This Is a required Field</Error>}
+        </InputWithErrorWrapper>
+
+        <InputWithErrorWrapper>
+          <Input
+            type="tel"
+            placeholder="Mobile number"
+            {...register("mobileNumber", {
+              required: true,
+              minLength: 6,
+              maxLength: 20,
+            })}
+          />
+          {errors.lastName && <Error>This Is a required Field</Error>}
+        </InputWithErrorWrapper>
       </PersonalDetailsWrapper>
       <ActionsWrapper>
         <Button
@@ -145,12 +160,36 @@ const FormWrapper = styled.form`
   }
 `;
 
+const InputWithErrorWrapper = styled.div`
+  min-width: 23rem;
+  display: flex;
+  gap: var(--spacing-40);
+  position: relative;
+  flex: 1;
+  @media (max-width: 38rem) {
+    min-width: 0;
+    width: 100%;
+  }
+`;
+const Error = styled.span`
+  color: var(--red-500);
+  font-size: 0.75rem;
+  padding-inline: 2rem;
+  position: absolute;
+  right: 16px;
+  bottom: 20px;
+
+  @media (max-width: 30rem) {
+    bottom: -18px;
+    left: 5px;
+  }
+`;
 const PersonalImageContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin-bottom: 3.8rem;
+  margin-bottom: 2.5rem;
   gap: 2.2rem;
   width: 100%;
 `;

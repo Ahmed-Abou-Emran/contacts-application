@@ -189,12 +189,20 @@ const PersonalImageContainer = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin-bottom: 2.5rem;
-  gap: 2.2rem;
+  margin-bottom: var(--spacing-100);
+  gap: var(--spacing-90);
   width: 100%;
+
+  @media (max-width: 38rem) {
+    gap: var(--spacing-60);
+  }
 `;
 const ImageWrapper = styled.div`
   width: 7rem;
+
+  @media (max-width: 38rem) {
+    width: 5rem;
+  }
 `;
 
 const Image = styled.img`
@@ -245,6 +253,11 @@ const ActionsWrapper = styled.div`
   justify-content: space-between;
   align-self: stretch;
   margin-top: var(--spacing-120);
+  margin-bottom: var(--spacing-40);
+
+  @media (max-width: 38rem) {
+    margin-top: var(--spacing-80);
+  }
 `;
 const Button = styled.button`
   min-width: 6.25rem;

@@ -1,15 +1,17 @@
 :root {
+  /* colors */
   --white-100: hsl(0, 0%, 100%);
   --white-200: hsl(0, 0%, 90%);
   --white-300: hsl(0, 0%, 80%);
   --white-400: hsl(0, 0%, 70%);
   --white-500: hsl(0, 0%, 60%);
+  --white-900: hsl(0, 0%, 20%);
 
   --sky-300: hsl(198, 88%, 62%);
   --sky-400: hsl(198, 88%, 52%);
-  --sky-600: hsl(198, 88%, 42%);
-  --sky-700: hsl(198, 88%, 32%);
-  --sky-800: hsl(198, 88%, 22%);
+  --sky-500: hsl(198, 88%, 42%);
+  --sky-600: hsl(198, 88%, 32%);
+  --sky-700: hsl(198, 88%, 22%);
 
   --red-300: hsl(0, 85%, 42%);
   --red-400: hsl(0, 85%, 52%);
@@ -17,6 +19,46 @@
   --red-600: hsl(0, 85%, 72%);
   --red-700: hsl(0, 85%, 82%);
   --red-800: hsl(0, 85%, 92%);
+
+  /* spacing */
+  --spacing-00: 0;
+  --spacing-05: 0.125rem;
+  --spacing-10: 0.25rem;
+  --spacing-15: 0.375rem;
+  --spacing-20: 0.5rem;
+  --spacing-25: 0.625rem;
+  --spacing-30: 0.75rem;
+  --spacing-35: 0.875rem;
+  --spacing-40: 1rem;
+  --spacing-50: 1.25rem;
+  --spacing-60: 1.5rem;
+  --spacing-70: 1.75rem;
+  --spacing-80: 2rem;
+  --spacing-90: 2.25rem;
+  --spacing-100: 2.5rem;
+  --spacing-110: 2.75rem;
+  --spacing-120: 3rem;
+  --spacing-130: 3.25rem;
+  --spacing-140: 3.5rem;
+  --spacing-160: 4rem;
+  --spacing-200: 5rem;
+  --spacing-240: 6rem;
+  --spacing-280: 7rem;
+  --spacing-320: 8rem;
+  --spacing-360: 9rem;
+  --spacing-400: 10rem;
+  --spacing-440: 11rem;
+  --spacing-480: 12rem;
+  --spacing-520: 13rem;
+  --spacing-560: 14rem;
+  --spacing-600: 15rem;
+  --spacing-640: 16rem;
+  --spacing-720: 18rem;
+  --spacing-800: 20rem;
+  --spacing-960: 24rem;
+
+  --container-width: 73rem;
+  --container-height: 42rem;
 }
 *,
 *::before,
@@ -24,14 +66,12 @@
   box-sizing: border-box;
   border: none;
 }
-html {
+html,
+body {
   height: 100%;
 }
 body {
   margin: 0;
-  display: flex;
-  align-items: center;
-  min-height: 100vh;
   color: #ffffff;
   background-image: url("./assets//background.jfif");
   background-position: center;
@@ -40,6 +80,8 @@ body {
 }
 
 #root {
-  min-height: 100%;
-  margin: 0 auto;
+  height: 100%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
 }

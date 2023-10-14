@@ -5,22 +5,21 @@ import {
   AiOutlineDelete as Delete,
 } from "react-icons/ai";
 import { ContactDialog } from "../../ui/ContactDialog";
-function Contact() {
-  {
-    /* contact details should be a form, to enable edit in same place */
-  }
+function Contact({ contact }) {
   return (
     <Wrapper>
       <Details>
         <ImageWrapper>
-          <Image src={image}></Image>
+          <Image src={contact.imageUrl}></Image>
         </ImageWrapper>
         <ContactInfo>
-          <div className="name"> Ahmed Ali</div>
-          <PhoneNumber> +201158653666</PhoneNumber>
+          <div className="name">
+            {contact.firstName} {contact.lastName}
+          </div>
+          <PhoneNumber> {contact.mobileNumber}</PhoneNumber>
         </ContactInfo>
       </Details>
-      <ContactDialog />
+      <ContactDialog contact={contact} />
     </Wrapper>
   );
 }

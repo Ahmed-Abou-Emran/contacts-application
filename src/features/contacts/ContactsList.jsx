@@ -1,34 +1,72 @@
+import React from "react";
 import styled from "styled-components";
 import ContactsActions from "./ContactsActions";
-import { DUMMY_CONTACTS } from "../../data/contacts";
+// import { DUMMY_CONTACTS } from "../../data/contacts";
 import Contact from "./Contact";
 import { AiOutlineRight as Right, AiOutlineLeft as Left } from "react-icons/ai";
+import { useContacts } from "./useContacts";
+import { ContactsContext } from "./ContactsProvider";
 
 function ContactsList() {
+  const { isLoading, error, contacts } = useContacts();
+  const { searchName } = React.useContext(ContactsContext);
+  const [currentPage, setCurrentPage] = React.useState(1);
+  const [numOfPages, setNumOfPages] = React.useState(1);
+  console.log(contacts);
+
+  let filteredContacts = contacts?.filter((contact) => {
+    if (searchName !== "") {
+      let fullName = `${contact?.firstName} ${contact?.lastName}`;
+
+      return fullName.toLowerCase().includes(searchName.toLowerCase());
+    } else {
+      return true;
+    }
+  });
+
+  const onPageChangeHandler = (dir) => {
+    if (currentPage == 1 && dir == -1) return;
+    if (currentPage == numOfPages && dir == 1) return;
+    setCurrentPage((prevPage) => prevPage + dir);
+  };
+
+  React.useEffect(() => {
+    setNumOfPages(Math.ceil(filteredContacts?.length / 2));
+  }, [filteredContacts]);
   return (
     <Wrapper>
       <ContactsActions />
-      <ContactsWrapper>
-        {DUMMY_CONTACTS.map((contact) => {
-          return (
-            <>
-              <Contact />
-              <div className="horizontalLine"></div>
-            </>
-          );
-        })}
-      </ContactsWrapper>
+      {isLoading && <Loading>Loading ...</Loading>}
+      {!isLoading && error && <Error> Ops 😢, Something Went wrong</Error>}
+      {!isLoading && !error && (
+        <>
+          <ContactsWrapper>
+            {filteredContacts
+              ?.reverse()
+              .slice(currentPage - 1, currentPage + 1)
+              ?.map((contact) => {
+                return (
+                  <React.Fragment key={contact.id}>
+                    <Contact contact={contact} />
+                    <div className="horizontalLine"></div>
+                  </React.Fragment>
+                );
+              })}
+          </ContactsWrapper>
+          <Pagination>
+            <Button onClick={() => onPageChangeHandler(-1)}>
+              <Left />
+            </Button>
 
-      <Pagination>
-        <Button>
-          <Left />
-        </Button>
-        {/* to be dynamic */}
-        <span>1/10</span>
-        <Button>
-          <Right />
-        </Button>
-      </Pagination>
+            <span>
+              {currentPage}/{numOfPages}
+            </span>
+            <Button onClick={() => onPageChangeHandler(1)}>
+              <Right />
+            </Button>
+          </Pagination>
+        </>
+      )}
     </Wrapper>
   );
 }
@@ -84,4 +122,22 @@ const Button = styled.button`
   }
 `;
 
+const Loading = styled.div`
+  margin-inline: auto;
+  background-color: var(--white-100);
+  color: var(--sky-700);
+  width: 30rem;
+  padding: 2rem;
+  border-radius: 25px;
+  font-weight: 700;
+`;
+const Error = styled.div`
+  margin-inline: auto;
+  background-color: var(--white-100);
+  color: var(--red-300);
+  width: 30rem;
+  padding: 2rem;
+  border-radius: 25px;
+  font-weight: 700;
+`;
 export default ContactsList;

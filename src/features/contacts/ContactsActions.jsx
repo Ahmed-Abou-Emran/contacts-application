@@ -1,11 +1,19 @@
+import React from "react";
 import SearchUserInput from "./SearchInput";
 import { AiFillPlusCircle as Plus } from "react-icons/ai";
 import styled from "styled-components";
+import { ContactsContext } from "./ContactsProvider";
 function ContactsActions() {
+  const { setFormIsOpen, setSelectedContact } =
+    React.useContext(ContactsContext);
+  const onAddHandler = () => {
+    setFormIsOpen(true);
+    setSelectedContact(null);
+  };
   return (
     <Wrapper>
       <SearchUserInput />
-      <ButtonWithIcon>
+      <ButtonWithIcon onClick={onAddHandler}>
         <Plus style={{ fontSize: "22px" }} />
         Add New Contact
       </ButtonWithIcon>

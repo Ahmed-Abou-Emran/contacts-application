@@ -1,11 +1,16 @@
 import React from "react";
 import styled from "styled-components";
+import { ContactsContext } from "./ContactsProvider";
 
 function SearchUserInput() {
+  const { onSearchChange, searchName } = React.useContext(ContactsContext);
+
   return (
-    // <SearchInputWrapper>
-    <SearchInput placeholder="Search by Name" />
-    // </SearchInputWrapper>
+    <SearchInput
+      value={searchName}
+      onChange={onSearchChange}
+      placeholder="Search by Name"
+    />
   );
 }
 

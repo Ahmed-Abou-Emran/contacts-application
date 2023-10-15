@@ -12,6 +12,7 @@ function ContactsList() {
   const { searchName } = React.useContext(ContactsContext);
   const [currentPage, setCurrentPage] = React.useState(1);
   const [numOfPages, setNumOfPages] = React.useState(1);
+  console.log(contacts);
 
   let filteredContacts = contacts?.filter((contact) => {
     if (searchName !== "") {
@@ -42,7 +43,10 @@ function ContactsList() {
           <ContactsWrapper>
             {filteredContacts
               ?.reverse()
-              .slice(currentPage - 1, currentPage + 1)
+              .slice(
+                (currentPage - 1) * 2, // Calculate the starting index
+                (currentPage - 1) * 2 + 2 // Calculate the ending index
+              )
               ?.map((contact) => {
                 return (
                   <React.Fragment key={contact.id}>
@@ -125,8 +129,8 @@ const Loading = styled.div`
   margin-inline: auto;
   background-color: var(--white-100);
   color: var(--sky-700);
-  width: 30rem;
-  padding: 2rem;
+  /* width: 30rem; */
+  padding: 2rem 4rem;
   border-radius: 25px;
   font-weight: 700;
 `;
@@ -134,8 +138,8 @@ const Error = styled.div`
   margin-inline: auto;
   background-color: var(--white-100);
   color: var(--red-300);
-  width: 30rem;
-  padding: 2rem;
+  min-width: 5rem;
+  padding: 2rem 4rem;
   border-radius: 25px;
   font-weight: 700;
 `;

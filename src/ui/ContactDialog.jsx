@@ -12,22 +12,16 @@ import { ContactsContext } from "../features/contacts/ContactsProvider";
 import { useDeleteContact } from "../features/contacts/useDeleteContact";
 
 export function ContactDialog({ contact }) {
-  const { setSelectedContact, setFormIsOpen, setIsEditing } =
-    React.useContext(ContactsContext);
+  const { onStartEditingHandler } = React.useContext(ContactsContext);
 
   const { isDeleting, deleteContact } = useDeleteContact();
 
-  const onEditHandler = (contact) => {
-    setIsEditing(true);
-    setFormIsOpen(true);
-    setSelectedContact(contact);
-  };
   return (
     <Dialog.Root>
       <ActionsWrapper>
         <Button
           hoverColor="var(--white-300)"
-          onClick={() => onEditHandler(contact)}
+          onClick={() => onStartEditingHandler(contact)}
           disabled={isDeleting}
         >
           <Edit style={{ color: "var(--sky-400)" }} />

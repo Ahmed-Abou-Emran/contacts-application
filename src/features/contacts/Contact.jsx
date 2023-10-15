@@ -1,22 +1,20 @@
-import image from "../../assets/contacts/4.jpg";
 import styled from "styled-components";
-import {
-  AiOutlineEdit as Edit,
-  AiOutlineDelete as Delete,
-} from "react-icons/ai";
 import { ContactDialog } from "../../ui/ContactDialog";
+
 function Contact({ contact }) {
+  const { imageUrl, firstName, lastName, mobileNumber } = contact;
+
   return (
     <Wrapper>
       <Details>
         <ImageWrapper>
-          <Image src={contact.imageUrl}></Image>
+          <Image src={imageUrl}></Image>
         </ImageWrapper>
         <ContactInfo>
           <div className="name">
-            {contact.firstName} {contact.lastName}
+            {firstName} {lastName}
           </div>
-          <PhoneNumber> {contact.mobileNumber}</PhoneNumber>
+          <PhoneNumber> {mobileNumber}</PhoneNumber>
         </ContactInfo>
       </Details>
       <ContactDialog contact={contact} />

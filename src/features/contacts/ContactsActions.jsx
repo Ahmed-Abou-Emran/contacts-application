@@ -4,12 +4,8 @@ import { AiFillPlusCircle as Plus } from "react-icons/ai";
 import styled from "styled-components";
 import { ContactsContext } from "./ContactsProvider";
 function ContactsActions() {
-  const { setFormIsOpen, setSelectedContact } =
-    React.useContext(ContactsContext);
-  const onAddHandler = () => {
-    setFormIsOpen(true);
-    setSelectedContact(null);
-  };
+  const { onAddHandler } = React.useContext(ContactsContext);
+
   return (
     <Wrapper>
       <SearchUserInput />

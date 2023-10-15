@@ -6,21 +6,44 @@ function ContactsProvider({ children }) {
   const [isEditing, setIsEditing] = React.useState(false);
   const [selectedContact, setSelectedContact] = React.useState(null);
 
+  // Searching
   const onSearchChange = (e) => {
-    console.log(e.target.value);
     setSearchName(e.target.value);
   };
+
+  // onAddHandler
+  const onAddHandler = () => {
+    setFormIsOpen(true);
+    setSelectedContact(null);
+  };
+
+  // Start Editng
+  const onStartEditingHandler = (contact) => {
+    setIsEditing(true);
+    setFormIsOpen(true);
+    setSelectedContact(contact);
+  };
+
+  // Stop Editing
+  const onEndEditingHandler = () => {
+    setIsEditing(false);
+    setFormIsOpen(false);
+  };
+
   return (
     <ContactsContext.Provider
       value={{
         formIsOpen,
-        setFormIsOpen,
+        // setFormIsOpen,
         selectedContact,
-        setSelectedContact,
+        // setSelectedContact,
         isEditing,
-        setIsEditing,
+        // setIsEditing,
         searchName,
         onSearchChange,
+        onAddHandler,
+        onStartEditingHandler,
+        onEndEditingHandler,
       }}
     >
       {children}

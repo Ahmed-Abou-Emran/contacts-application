@@ -8,13 +8,8 @@ const avatarUrl =
   "https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Missing_avatar.svg/1200px-Missing_avatar.svg.png";
 
 export default function ContactForm() {
-  const {
-    setFormIsOpen,
-    selectedContact,
-    setSelectedContact,
-    isEditing,
-    setIsEditing,
-  } = React.useContext(ContactsContext);
+  const { selectedContact, isEditing, onEndEditingHandler } =
+    React.useContext(ContactsContext);
   const [previewImage, setPreviewImage] = React.useState(null);
   const { addContact } = useAddContact();
   const { editCabin } = useEditContact();
@@ -26,28 +21,26 @@ export default function ContactForm() {
   } = useForm({
     defaultValues: selectedContact,
   });
-  console.log(errors);
+
   let imageSrc = previewImage
     ? previewImage
     : selectedContact?.imageUrl
     ? selectedContact.imageUrl
     : avatarUrl;
+
   const onSubmit = (data) => {
     if (!isEditing) {
       addContact({ ...data, imageUrl: imageSrc });
     } else {
       editCabin({ newContactData: data, id: selectedContact.id });
     }
-    setIsEditing(false);
-    setFormIsOpen(false);
-    console.log(data);
+    onEndEditingHandler();
   };
   const onPreviewHandler = (e) => {
     e.preventDefault();
     setPreviewImage(getValues("imageUrl"));
   };
 
-  // remaining: adding error messages and toasts
   return (
     <FormWrapper key={selectedContact?.id} onSubmit={handleSubmit(onSubmit)}>
       <PersonalImageContainer>
@@ -118,7 +111,7 @@ export default function ContactForm() {
           backgroundColor="var(--white-400)"
           hoverColor="var(--white-300)"
           borderRadius="25px"
-          onClick={() => setFormIsOpen(false)}
+          onClick={onEndEditingHandler}
         >
           Cancel
         </Button>

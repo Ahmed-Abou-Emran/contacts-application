@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { ContactsContext } from "./ContactsProvider";
 import { useAddContact } from "./useAddContact";
 import { useEditContact } from "./useEditContact";
+import FileInput from "../../ui/FileInput";
 const avatarUrl =
   "https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Missing_avatar.svg/1200px-Missing_avatar.svg.png";
 
@@ -11,11 +12,12 @@ const phoneRegEx =
   /^\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}$/;
 
 export default function ContactForm() {
+  const [isImageUpload, setIsImageUpload] = React.useState(false);
   const { selectedContact, isEditing, onEndEditingHandler } =
     React.useContext(ContactsContext);
   const [previewImage, setPreviewImage] = React.useState(null);
   const { addContact } = useAddContact();
-  const { editCabin } = useEditContact();
+  const { editContact } = useEditContact();
   const {
     register,
     handleSubmit,
@@ -25,24 +27,35 @@ export default function ContactForm() {
     defaultValues: selectedContact,
   });
 
-  let imageSrc = previewImage
-    ? previewImage
-    : selectedContact?.imageUrl
-    ? selectedContact.imageUrl
-    : avatarUrl;
+  const imageSrc = previewImage ?? selectedContact?.imageUrl ?? avatarUrl;
 
+  const toggleImageOption = () => {
+    setPreviewImage(imageSrc);
+    setIsImageUpload((prev) => !prev);
+  };
   const onSubmit = (data) => {
+    // const image = typeof data.image === "string" ? data.image : data.image[0];
+
     if (!isEditing) {
-      addContact({ ...data, imageUrl: imageSrc });
+      addContact({
+        ...data,
+        imageUrl: imageSrc,
+      });
     } else {
-      editCabin({ newContactData: data, id: selectedContact.id });
+      editContact({ newContactData: data, id: selectedContact.id });
     }
     onEndEditingHandler();
   };
   const onPreviewHandler = (e) => {
     e.preventDefault();
-    setPreviewImage(getValues("imageUrl"));
+    console.log(getValues("imageUrl"));
+    if (isImageUpload) {
+      setPreviewImage(URL.createObjectURL(getValues("imageUrl")[0]));
+    } else {
+      setPreviewImage(getValues("imageUrl"));
+    }
   };
+  console.log(errors);
 
   return (
     <FormWrapper key={selectedContact?.id} onSubmit={handleSubmit(onSubmit)}>
@@ -51,21 +64,43 @@ export default function ContactForm() {
           <Image src={imageSrc} />
         </ImageWrapper>
         <ImageInputWrapper>
-          <Input
-            type="text"
-            style={{ flex: 1 }}
-            placeholder="Image Url"
-            {...register("imageUrl")}
-          />
-          <Button
-            backgroundColor="var(--sky-600)"
-            hoverColor="var(--sky-700)"
-            color="var(--white-100)"
-            borderRadius="25px"
-            onClick={onPreviewHandler}
-          >
-            Preview
-          </Button>
+          {isImageUpload && (
+            <FileInput
+              accept="image/*"
+              {...register("imageUrl", {})}
+            ></FileInput>
+          )}
+          {!isImageUpload && (
+            <Input
+              type="text"
+              style={{ flex: 1 }}
+              placeholder="Image Url"
+              {...register("imageUrl")}
+            />
+          )}
+
+          <ImageInputActions>
+            <Button
+              backgroundColor="var(--sky-600)"
+              hoverColor="var(--sky-700)"
+              color="var(--white-100)"
+              borderRadius="25px"
+              onClick={toggleImageOption}
+              type="button"
+            >
+              {isImageUpload && "URL ?"}
+              {!isImageUpload && "Upload ?"}
+            </Button>
+            <Button
+              backgroundColor="var(--sky-600)"
+              hoverColor="var(--sky-700)"
+              color="var(--white-100)"
+              borderRadius="25px"
+              onClick={onPreviewHandler}
+            >
+              Preview
+            </Button>
+          </ImageInputActions>
         </ImageInputWrapper>
       </PersonalImageContainer>
       <PersonalDetailsWrapper>
@@ -220,6 +255,8 @@ const Image = styled.img`
 const ImageInputWrapper = styled.div`
   width: 100%;
   display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   gap: var(--spacing-40);
 
   @media (max-width: 38rem) {
@@ -243,6 +280,13 @@ const Input = styled.input`
     min-width: 0;
     width: 100%;
   }
+`;
+
+const ImageInputActions = styled.div`
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-40);
+  justify-content: center;
 `;
 
 const PersonalDetailsWrapper = styled.div`
@@ -274,6 +318,7 @@ const Button = styled.button`
   font-size: 1.25rem;
   display: flex;
   align-items: center;
+  padding: var(--spacing-40) var(--spacing-40);
   justify-content: center;
   background-color: ${(props) => props.backgroundColor};
   color: ${(props) => props.color};

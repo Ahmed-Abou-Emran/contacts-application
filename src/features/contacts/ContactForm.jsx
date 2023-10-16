@@ -7,6 +7,9 @@ import { useEditContact } from "./useEditContact";
 const avatarUrl =
   "https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Missing_avatar.svg/1200px-Missing_avatar.svg.png";
 
+const phoneRegEx =
+  /^\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}$/;
+
 export default function ContactForm() {
   const { selectedContact, isEditing, onEndEditingHandler } =
     React.useContext(ContactsContext);
@@ -80,16 +83,22 @@ export default function ContactForm() {
             placeholder="Last name"
             {...register("lastName", { required: true, maxLength: 100 })}
           />
-          {errors.lastName && <Error>This Is a required field</Error>}
+          {errors.lastName && <Error>This is a required field</Error>}
         </InputWithErrorWrapper>
 
         <InputWithErrorWrapper>
           <Input
             type="text"
             placeholder="Email"
-            {...register("email", { required: true, pattern: /^\S+@\S+$/i })}
+            {...register("email", {
+              required: "This is a required field",
+              pattern: {
+                value: /^\S+@\S+$/i,
+                message: "Not a Valid Email Address",
+              },
+            })}
           />
-          {errors.lastName && <Error>This Is a required Field</Error>}
+          {errors?.email?.message && <Error>{errors?.email?.message}</Error>}
         </InputWithErrorWrapper>
 
         <InputWithErrorWrapper>
@@ -97,12 +106,18 @@ export default function ContactForm() {
             type="tel"
             placeholder="Mobile number"
             {...register("mobileNumber", {
-              required: true,
-              minLength: 6,
-              maxLength: 20,
+              required: "This is a Required Field",
+              pattern: {
+                value: phoneRegEx,
+                message: "Not a Valid Phone Number",
+              },
+              minLength: { value: 6, message: "Minimum 6 Digits" },
+              maxLength: { value: 20, message: "maximum 20 Digits" },
             })}
           />
-          {errors.lastName && <Error>This Is a required Field</Error>}
+          {errors?.mobileNumber?.message && (
+            <Error>{errors?.mobileNumber?.message}</Error>
+          )}
         </InputWithErrorWrapper>
       </PersonalDetailsWrapper>
       <ActionsWrapper>

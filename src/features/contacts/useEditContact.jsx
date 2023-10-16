@@ -5,7 +5,7 @@ import { toast } from "react-hot-toast";
 export function useEditContact() {
   const queryClient = useQueryClient();
 
-  const { mutate: editCabin, isLoading: isUpdating } = useMutation({
+  const { mutate: editContact, isLoading: isUpdating } = useMutation({
     mutationFn: ({ newContactData, id }) => addEditContact(newContactData, id),
     onSuccess: () => {
       toast.success("Contact successfully edited");
@@ -14,5 +14,5 @@ export function useEditContact() {
     onError: (err) => toast.error(err.message),
   });
 
-  return { isUpdating, editCabin };
+  return { isUpdating, editContact };
 }

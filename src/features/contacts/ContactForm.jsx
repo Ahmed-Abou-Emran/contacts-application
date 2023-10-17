@@ -27,6 +27,8 @@ export default function ContactForm() {
     defaultValues: selectedContact,
   });
 
+  let objectUrl = null;
+
   const imageSrc = previewImage ?? selectedContact?.imageUrl ?? avatarUrl;
 
   const toggleImageOption = () => {
@@ -39,7 +41,7 @@ export default function ContactForm() {
     if (!isEditing) {
       addContact({
         ...data,
-        imageUrl: imageSrc,
+        imageUrl: isImageUpload ? getValues("imageUrl")[0] : imageSrc,
       });
     } else {
       editContact({ newContactData: data, id: selectedContact.id });
@@ -49,19 +51,41 @@ export default function ContactForm() {
   const onPreviewHandler = (e) => {
     e.preventDefault();
     console.log(getValues("imageUrl"));
+
     if (isImageUpload) {
-      setPreviewImage(URL.createObjectURL(getValues("imageUrl")[0]));
+      if (objectUrl) {
+        URL.revokeObjectURL(objectUrl);
+      }
+      objectUrl = URL.createObjectURL(getValues("imageUrl")[0]);
+      setPreviewImage(objectUrl);
+
+      // Reset the input field value to an empty string
+      register("imageUrl").setValue("");
     } else {
       setPreviewImage(getValues("imageUrl"));
     }
   };
   console.log(errors);
 
+  React.useEffect(() => {
+    return () => {
+      if (objectUrl) {
+        URL.revokeObjectURL(objectUrl);
+      }
+    };
+  }, []);
   return (
     <FormWrapper key={selectedContact?.id} onSubmit={handleSubmit(onSubmit)}>
       <PersonalImageContainer>
         <ImageWrapper>
-          <Image src={imageSrc} />
+          <Image
+            src={imageSrc}
+            alt={
+              selectedContact
+                ? `${selectedContact?.firstName} ${selectedContact.lastName}'s Avatar`
+                : "Placeholder Avatar"
+            }
+          />
         </ImageWrapper>
         <ImageInputWrapper>
           {isImageUpload && (

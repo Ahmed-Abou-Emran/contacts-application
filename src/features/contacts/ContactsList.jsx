@@ -30,7 +30,11 @@ function ContactsList() {
   };
 
   React.useEffect(() => {
-    setNumOfPages(Math.ceil(filteredContacts?.length / 2));
+    let newNumOfPages =
+      Math.ceil(filteredContacts?.length / 2) > 0
+        ? Math.ceil(filteredContacts?.length / 2)
+        : 1;
+    setNumOfPages(newNumOfPages);
   }, [filteredContacts]);
   return (
     <Wrapper>

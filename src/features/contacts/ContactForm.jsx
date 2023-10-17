@@ -36,21 +36,25 @@ export default function ContactForm() {
     setIsImageUpload((prev) => !prev);
   };
   const onSubmit = (data) => {
-    // const image = typeof data.image === "string" ? data.image : data.image[0];
-
+    console.log(data);
     if (!isEditing) {
       addContact({
         ...data,
         imageUrl: isImageUpload ? getValues("imageUrl")[0] : imageSrc,
       });
     } else {
-      editContact({ newContactData: data, id: selectedContact.id });
+      editContact({
+        newContactData: {
+          ...data,
+          imageUrl: isImageUpload ? getValues("imageUrl")[0] : imageSrc,
+        },
+        id: selectedContact.id,
+      });
     }
     onEndEditingHandler();
   };
   const onPreviewHandler = (e) => {
     e.preventDefault();
-    console.log(getValues("imageUrl"));
 
     if (isImageUpload) {
       if (objectUrl) {
@@ -65,7 +69,6 @@ export default function ContactForm() {
       setPreviewImage(getValues("imageUrl"));
     }
   };
-  console.log(errors);
 
   React.useEffect(() => {
     return () => {
@@ -273,7 +276,9 @@ const ImageWrapper = styled.div`
 `;
 
 const Image = styled.img`
+  border: 3px solid gold;
   width: 100%;
+  height: 100%;
   border-radius: 50%;
 `;
 const ImageInputWrapper = styled.div`
